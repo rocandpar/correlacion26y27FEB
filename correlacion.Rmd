@@ -104,5 +104,5 @@ library(ggpubr)
 ggscatter(dist_ncuent, x = "distancia", y = "n_piezas",
           add ="reg.line", conf.int = TRUE,
           cor.coef = TRUE, cor.method= "pearson",
-          xlab = "Distancia (Km)", ylab = "Número de piezas")
+          xlab = "Distancia", ylab = "Número de piezas")
 ```
