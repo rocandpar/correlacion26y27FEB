@@ -1,0 +1,108 @@
+---
+title: "Correlacion"
+author: "rocio"
+date: "2024-02-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r echo=TRUE}
+library(readxl)
+data <- as.data.frame(read_excel("C:/data.xlsx"))
+```
+
+```{r}
+# Función para agregar coeficientes de correlación
+panel.cor = function(x, y, digits = 2, prefix = "", cex.cor, ...) {
+  usr = par("usr")
+  on.exit(par(usr))
+  par(usr = c(0, 1, 0, 1))
+  Cor = abs(cor(x, y))
+  txt = paste0(prefix, format(c(Cor, 0.123456789), digits = digits)[1])
+  if(missing(cex.cor)) {
+    cex.cor = 0.4 / strwidth(txt)
+  }
+  text(0.5, 0.5, txt,
+       cex = 1 + cex.cor * Cor)
+}
+pairs(data,
+      upper.panel = panel.cor,
+      lower.panel = panel.smooth)
+```
+
+
+
+
+```{r echo=TRUE}
+cor.test(data$longitud, data$peso)
+```
+
+```{r warning=FALSE}
+library(correlation)
+resultados = correlation(data)
+resultados
+```
+
+
+
+
+```{r echo=TRUE}
+library(ggpubr)
+ggscatter(data, x = "longitud", y = "peso",
+          add = "reg.line", conf.int = TRUE,
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Longitud piezas (mm)", ylab = "Peso piezas (mg)")
+```
+
+```{r echo=TRUE}
+library(corrplot)
+corrplot(cor(data))
+```
+
+```{r echo=TRUE}
+distancia <- c(1.1,100.2,90.3,5.4,57.5,6.6,34.7,65.8,57.98,86.1)
+n_piezas <- c(110,2,6,98,40,94,31,5,8,10)
+dist_ncuent <- data.frame(distancia, n_piezas)
+knitr::kable(dist_ncuent)
+```
+
+
+```{r warning=FALSE}
+library(correlation)
+resultados<-correlation(dist_ncuent)
+resultados
+```
+
+
+```{r echo=TRUE}
+cor.test(dist_ncuent$distancia, dist_ncuent$n_piezas)
+```
+```{r echo=TRUE}
+library(ggpubr)
+ggscatter(dist_ncuent, x = "distancia", y = "n_piezas",
+          add ="reg.line", conf.int = TRUE,
+          cor.coef = TRUE, cor.method= "pearson",
+          xlab = "Distancia (Km)", ylab = "Número de piezas")
+```
